@@ -24,22 +24,23 @@ Globals:
       Role: !Ref CodeDeployRole
 
 Resources:
-  GetHelloWorld:
+  OjosamaAPI:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-GetHelloWorld'
+      FunctionName: ojosama-api
       Handler: main
       Runtime: go1.x
+      Timeout: 10
       Role:
         Fn::GetAtt:
         - LambdaExecutionRole
         - Arn
       Events:
-        GetEvent:
+        PostEvent:
           Type: Api
           Properties:
             Path: /
-            Method: get
+            Method: post
   LambdaExecutionRole:
     Description: Creating service role in IAM for AWS Lambda
     Type: AWS::IAM::Role

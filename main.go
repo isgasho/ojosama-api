@@ -1,29 +1,55 @@
 package main
 
 import (
-	"io/ioutil"
+	"encoding/json"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/jiro4989/ojosama"
 )
+
+type RequestPostOjosama struct {
+	Text string
+}
+
+type ResponseOjosama struct {
+	Result string
+}
 
 // Handler is executed by AWS Lambda in the main function. Once the request
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	body := request.Body
 
-	index, err := ioutil.ReadFile("public/index.html")
+	var r RequestPostOjosama
+	if err := json.Unmarshal([]byte(body), &r); err != nil {
+		return events.APIGatewayProxyResponse{}, err
+	}
+
+	if r.Text == "" {
+		return events.APIGatewayProxyResponse{}, nil
+	}
+
+	result, err := ojosama.Convert(r.Text, nil)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, err
+	}
+
+	var resp ResponseOjosama
+	resp.Result = result
+
+	b, err := json.Marshal(resp)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
 	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string(index),
+		Body:       string(b),
 		Headers: map[string]string{
-			"Content-Type": "text/html",
+			"Content-Type": "application/json",
 		},
 	}, nil
-
 }
 
 func main() {

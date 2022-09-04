@@ -4,25 +4,18 @@ phases:
 
   install:
     runtime-versions:
-      golang: 1.14
+      golang: 1.19
 
 
     commands:
 
-    # Use go modules rather than GOPATH
-    - export GO111MODULE="on"
+    - go mod download
 
     # Install golint
-    - go get golang.org/x/lint/golint@v0.0.0-20210508222113-6edffad5e616
-
-    # Install Testify to use common assertions and mocks in tests
-    - go get -u github.com/stretchr/testify@v1.6.1
+    - go install golang.org/x/lint/golint@v0.0.0-20210508222113-6edffad5e616
 
   pre_build:
     commands:
-
-    # Fetch all dependencies
-    - go get ./...
 
     # Ensure code passes all lint tests
     - golint -set_exit_status
@@ -31,7 +24,7 @@ phases:
     - go vet .
 
     # Run all tests included with our application
-    - go test .
+    - go test -cover ./...
 
   build:
     commands:
@@ -40,8 +33,8 @@ phases:
     - go build -o main
 
     # Copy static assets to S3, and package application with AWS CloudFormation/SAM
-    - aws s3 cp --recursive public/ s3://$WEBSITE_S3_BUCKET/public/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-    - sed -i -e "s|assets/|$WEBSITE_S3_PREFIX/public/assets/|g" public/index.html
+    #- aws s3 cp --recursive public/ s3://$WEBSITE_S3_BUCKET/public/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+    #- sed -i -e "s|assets/|$WEBSITE_S3_PREFIX/public/assets/|g" public/index.html
     - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
 
   post_build:
