@@ -1,0 +1,8 @@
+= ojosama-api
+:toc: left
+:sectnums:
+
+image:https://github.com/jiro4989/ojosama-api/workflows/test/badge.svg[test, link=https://github.com/jiro4989/ojosama-api/actions]
+image:https://codecov.io/gh/jiro4989/ojosama-api/branch/master/graph/badge.svg[codecov, link=https://codecov.io/gh/jiro4989/ojosama-api]
+
+テキストを壱百満天原サロメお嬢様風の口調に変換して返す AWS Lambda API です。
