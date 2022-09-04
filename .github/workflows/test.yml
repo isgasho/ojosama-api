@@ -15,7 +15,7 @@ name: test
       - LICENSE
 
 env:
-  goversion: '1.19'
+  goversion: '1.18'
 
 jobs:
   test:
@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         go:
-          - '1.19'
+          - '1.18'
           - '1.x'
     steps:
       - uses: actions/checkout@v3
