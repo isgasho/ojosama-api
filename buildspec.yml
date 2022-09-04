@@ -11,14 +11,8 @@ phases:
 
     - go mod download
 
-    # Install golint
-    - go install golang.org/x/lint/golint@v0.0.0-20210508222113-6edffad5e616
-
   pre_build:
     commands:
-
-    # Ensure code passes all lint tests
-    - golint -set_exit_status
 
     # Check for common Go application problems with 'go vet'
     - go vet .
