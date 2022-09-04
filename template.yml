@@ -24,10 +24,10 @@ Globals:
       Role: !Ref CodeDeployRole
 
 Resources:
-  OjosamaAPI:
+  FunctionOjosamaAPI:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: ojosama-api
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-ojosama-api'
       Handler: main
       Runtime: go1.x
       Timeout: 10
